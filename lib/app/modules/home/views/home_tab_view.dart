@@ -29,7 +29,6 @@ class HomeTabView extends GetView<HomeController> {
                 key: _formKey,
                 child: TextFormField(
                   autofocus: true,
-                  keyboardType: TextInputType.number,
                   controller: controller.ip,
                   decoration: InputDecoration(labelText: 'Enter IP'),
                   validator: (value) {

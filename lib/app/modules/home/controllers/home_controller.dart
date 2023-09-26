@@ -52,7 +52,7 @@ class HomeController extends GetxController {
     }
     try {
       final response =
-          await http.get(Uri.parse('http://$ip/api/saldo.php?nis=$code'));
+          await http.get(Uri.parse('$ip/api/saldo.php?nis=$code'));
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
         jsonResponseData = jsonResponse;
@@ -63,7 +63,7 @@ class HomeController extends GetxController {
       }
     } catch (e) {
       controller?.resumeCamera();
-      return Get.snackbar('Server Error', 'Try again later');
+      return Get.snackbar('Server Error', '${e}');
     }
   }
 
