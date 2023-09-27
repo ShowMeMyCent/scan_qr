@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:qrcodescan/app/modules/history/views/history_view.dart';
 import 'package:qrcodescan/app/modules/home/views/home_tab_view.dart';
 
 import '../controllers/home_controller.dart';
@@ -10,6 +11,7 @@ import '../controllers/home_controller.dart';
 class HomeView extends GetView<HomeController> {
   final screens = [
     HomeTabView(),
+    HistoryView(),
   ];
 
   @override
@@ -62,11 +64,16 @@ class HomeView extends GetView<HomeController> {
             itemPadding: EdgeInsets.symmetric(
                 vertical: Get.height / 100, horizontal: Get.width / 7),
             selectedIndex: controller.selectedIndex.value,
-            items: [
+            items: const [
               /// Home
               BottomBarItem(
                 icon: Icon(Icons.home),
                 title: Text("Home"),
+                activeColor: Colors.purple,
+              ),
+              BottomBarItem(
+                icon: Icon(Icons.description),
+                title: Text("Laporan"),
                 activeColor: Colors.purple,
               ),
             ],

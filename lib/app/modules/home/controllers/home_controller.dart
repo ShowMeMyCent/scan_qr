@@ -30,7 +30,6 @@ class HomeController extends GetxController {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? ip = prefs.getString('ip');
     this.controller = controller;
-
     if (ip == null) {
       Get.dialog(
         AlertDialog(
