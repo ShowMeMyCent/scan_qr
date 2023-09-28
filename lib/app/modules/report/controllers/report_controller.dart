@@ -14,7 +14,7 @@ class ReportController extends GetxController {
 
   final indonesianFormat = NumberFormat.currency(
     locale: 'id_ID', // 'id_ID' represents the Indonesian locale
-    symbol: 'Rp.', // The currency symbol to use
+    symbol: 'Rp. ', // The currency symbol to use
     decimalDigits: 0,
   );
 
