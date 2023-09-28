@@ -15,6 +15,7 @@ class ReportController extends GetxController {
   final indonesianFormat = NumberFormat.currency(
     locale: 'id_ID', // 'id_ID' represents the Indonesian locale
     symbol: 'Rp.', // The currency symbol to use
+    decimalDigits: 0,
   );
 
   void submitData(String jumlah, String nis, String nama, int id) async {
