@@ -68,7 +68,7 @@ class HomeController extends GetxController {
 
   ping(ip) async {
     final response = await http.get(Uri.parse('$ip/api/ping.php'));
-    print(ip);
+
     if (response.statusCode != 200) {
       return Get.snackbar('Error', 'error code ${response.statusCode}',duration: Duration(seconds: 2),backgroundColor: Colors.white,colorText: Colors.black);
     } else {
