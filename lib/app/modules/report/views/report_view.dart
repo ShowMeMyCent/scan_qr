@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -30,7 +31,9 @@ class ReportView extends GetView<ReportController> {
           icon: Icon(Icons.arrow_back),
         ),
         elevation: 0,
-        actions: [Image.asset('assets/images/logo.png')],
+        actions: [SvgPicture.asset(
+          'assets/images/logo.svg', height: 20, // Replace with the path to your SVG file
+        )],
         title: RichText(
           text: TextSpan(
             children: [
@@ -253,13 +256,9 @@ class ReportView extends GetView<ReportController> {
 
                           // Set the flag to indicate submission is in progress
                           isSubmitting = true;
-
                           // Convert jumlah and saldo to integers for comparison
-                          int jumlah =
-                              int.tryParse(controller.jumlah.text) ?? 0;
-                          int saldo =
-                              int.tryParse(homeC.jsonResponseData!["saldo"]) ??
-                                  0;
+                          int jumlah = int.tryParse(controller.jumlah.text) ?? 0;
+                          int saldo = homeC.jsonResponseData!["saldo"];
 
                           // Check if jumlah is greater than saldo
                           if (jumlah > saldo) {
@@ -288,7 +287,10 @@ class ReportView extends GetView<ReportController> {
                             controller.submitData(
                                 controller.jumlah.text,
                                 homeC.jsonResponseData!["nis"],
-                                homeC.jsonResponseData!["nama"]);
+                                homeC.jsonResponseData!["nama"],
+                                int.tryParse(homeC.jsonResponseData!["id"]) ??
+                                    0,
+                            );
                           }
                         },
                   child: const Text('Submit'),

@@ -1,5 +1,6 @@
 import 'package:bottom_bar/bottom_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -25,7 +26,10 @@ class HomeView extends GetView<HomeController> {
             ),
           ),
           elevation: 0,
-          actions: [Image.asset('assets/images/logo.png')],
+          actions: [SvgPicture.asset(
+            'assets/images/logo.svg', width: 100, // Replace with the path to your SVG file
+
+          )],
           title: RichText(
             text: TextSpan(
               children: [

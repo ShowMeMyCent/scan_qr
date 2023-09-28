@@ -77,11 +77,13 @@ class HomeController extends GetxController {
   }
 
   Future<List<Map<String, dynamic>>> getData(String date) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? ip = prefs.getString('ip');
+
     final apiUrl = '$ip/api/history.php?tanggal=$date';
 
     try {
       final response = await http.get(Uri.parse(apiUrl));
-
       if (response.statusCode == 200) {
         final List<dynamic> jsonData = json.decode(response.body)['data'];
         return jsonData.cast<Map<String, dynamic>>();

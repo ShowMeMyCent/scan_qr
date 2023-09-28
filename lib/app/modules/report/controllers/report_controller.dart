@@ -17,7 +17,7 @@ class ReportController extends GetxController {
     symbol: 'Rp.', // The currency symbol to use
   );
 
-  void submitData(String jumlah, String nis, String nama) async {
+  void submitData(String jumlah, String nis, String nama, int id) async {
     final now = DateTime.now();
     final formattedDate = "${now.day}/${now.month}/${now.year}";
 
@@ -30,6 +30,7 @@ class ReportController extends GetxController {
           'Content-Type': 'application/json', // Set the content type to JSON
         },
         body: jsonEncode({
+          "id" : id,
           'nis': nis,
           'jumlah': jumlah,
         }),
