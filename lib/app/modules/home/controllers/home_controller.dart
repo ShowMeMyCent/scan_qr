@@ -70,9 +70,9 @@ class HomeController extends GetxController {
     final response = await http.get(Uri.parse('$ip/api/ping.php'));
     print(ip);
     if (response.statusCode != 200) {
-      return Get.snackbar('Error', 'error code ${response.statusCode}');
+      return Get.snackbar('Error', 'error code ${response.statusCode}',duration: Duration(seconds: 2),backgroundColor: Colors.white,colorText: Colors.black);
     } else {
-      Get.snackbar('Success', 'Connection success');
+      Get.snackbar('Success', 'Connection success',duration: Duration(seconds: 2),backgroundColor: Colors.white,colorText: Colors.black);
     }
   }
 

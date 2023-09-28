@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qrcodescan/app/modules/home/controllers/home_controller.dart';
 
@@ -12,6 +13,13 @@ class ReportView extends GetView<ReportController> {
   final homeC = Get.find<HomeController>();
   QRViewController? qrController;
   bool isSubmitting = false;
+
+  final indonesianFormat = NumberFormat.currency(
+    locale: 'id_ID', // 'id_ID' represents the Indonesian locale
+    symbol: 'Rp. ', // The currency symbol to use
+    decimalDigits: 0,
+  );
+
 
   @override
   Widget build(BuildContext context) {
@@ -167,7 +175,7 @@ class ReportView extends GetView<ReportController> {
                                     Container(
                                       padding: EdgeInsets.all(10),
                                       child: Text(
-                                        '${homeC.jsonResponseData!['saldo']}',
+                                        indonesianFormat.format(homeC.jsonResponseData!['saldo']),
                                         style:
                                             GoogleFonts.poppins(fontSize: 17),
                                       ),
@@ -187,7 +195,7 @@ class ReportView extends GetView<ReportController> {
                                     Container(
                                       padding: EdgeInsets.all(10),
                                       child: Text(
-                                        '${homeC.jsonResponseData!['belanja']}',
+                                        indonesianFormat.format(int.tryParse(homeC.jsonResponseData!['belanja'])),
                                         style:
                                             GoogleFonts.poppins(fontSize: 17),
                                       ),
