@@ -23,9 +23,10 @@ class HomeController extends GetxController {
   }
 
   void changeIndex(int index) {
+    (index != 0) ? controller!.pauseCamera() : controller!.resumeCamera();
     selectedIndex.value = index;
   }
-  
+
   fetchData(code) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? ip = prefs.getString('ip');
@@ -50,8 +51,35 @@ class HomeController extends GetxController {
       );
     }
     try {
+      final response = await http.get(Uri.parse('$ip/api/saldo.php?nis=$code'));
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        jsonResponseData = jsonResponse;
+        Get.toNamed(Routes.REPORT);
+      } else {
+        controller?.resumeCamera();
+        return Get.snackbar('Error', 'Status Code: ${response.statusCode}');
+      }
+    } catch (e) {
+      controller?.resumeCamera();
+      return Get.snackbar('Server Error', '${e}');
+    }
+  }
+
+  ping(ip) async {
+    final response = await http.get(Uri.parse('$ip/api/ping.php'));
+    print(ip);
+    if (response.statusCode != 200) {
+      return Get.snackbar('Error', 'error code ${response.statusCode}');
+    } else {
+      Get.snackbar('Success', 'Connection success');
+    }
+  }
+
+  getData(date) async {
+    try {
       final response =
-          await http.get(Uri.parse('$ip/api/saldo.php?nis=$code'));
+          await http.get(Uri.parse('$ip/api/history.php?tanggal=${date}'));
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
         jsonResponseData = jsonResponse;
@@ -79,8 +107,22 @@ class HomeController extends GetxController {
     Get.back();
   }
 
-  void resumecamera(QRViewController controller) {
-    this.controller = controller;
-    resumecamera(controller);
+  resumecamera() {
+    controller?.resumeCamera();
+    return true;
+  }
+
+  Rx<DateTime> selectedDate = DateTime.now().obs;
+  Future<void> selectDate(BuildContext context) async {
+    DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate.value,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+
+    if (picked != null && picked != selectedDate.value) {
+      selectedDate.value = picked;
+    }
   }
 }

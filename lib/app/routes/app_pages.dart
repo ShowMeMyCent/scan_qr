@@ -1,7 +1,5 @@
 import 'package:get/get.dart';
 
-import '../modules/history/bindings/history_binding.dart';
-import '../modules/history/views/history_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/report/bindings/report_binding.dart';
@@ -31,11 +29,6 @@ class AppPages {
       name: _Paths.REPORT,
       page: () => ReportView(),
       binding: ReportBinding(),
-    ),
-    GetPage(
-      name: _Paths.HISTORY,
-      page: () => const HistoryView(),
-      binding: HistoryBinding(),
     ),
   ];
 }

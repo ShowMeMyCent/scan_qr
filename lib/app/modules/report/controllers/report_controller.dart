@@ -18,15 +18,14 @@ class ReportController extends GetxController {
   );
 
   void submitData(String jumlah, String nis, String nama) async {
-
     final now = DateTime.now();
     final formattedDate = "${now.day}/${now.month}/${now.year}";
-
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? ip = prefs.getString('ip');
     try {
-      final response = await http.post(Uri.parse('$ip/api/setoran.php'),
+      final response = await http.post(
+        Uri.parse('$ip/api/setoran.php'),
         headers: {
           'Content-Type': 'application/json', // Set the content type to JSON
         },
@@ -48,7 +47,8 @@ class ReportController extends GetxController {
         final formattedJumlah = indonesianFormat.format(int.parse(jumlah));
         final formattedSaldo = indonesianFormat.format(saldo);
 
-        Get.offAllNamed('/home'); // Replace with the actual route name for your home page
+        Get.offAllNamed(
+            '/home'); // Replace with the actual route name for your home page
 
         // Show a pop-up dialog
         Get.dialog(
@@ -57,7 +57,8 @@ class ReportController extends GetxController {
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                Text("$message belanja hari ini atas nama $nama, Rp. $formattedJumlah pada tanggal $formattedDate saldo akhir Rp. $formattedSaldo"  ),
+                Text(
+                    "$message belanja hari ini atas nama $nama, Rp. $formattedJumlah pada tanggal $formattedDate saldo akhir Rp. $formattedSaldo"),
                 SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
@@ -70,18 +71,9 @@ class ReportController extends GetxController {
             ),
           ),
         );
-
-        /*Get.snackbar(
-          'Berhasil Belanja',
-          'Berhasil belanja dengan $jumlah pada tanggal $formattedDate',
-          snackPosition: SnackPosition.BOTTOM,
-          duration: Duration(seconds: 2), // Set the duration to 2 seconds
-        );*/
-
-
       } else {
-
-        Get.offAllNamed('/home'); // Replace with the actual route name for your home page
+        Get.offAllNamed(
+            '/home'); // Replace with the actual route name for your home page
 
         Get.snackbar(
           'Proses gagal',
@@ -89,7 +81,6 @@ class ReportController extends GetxController {
           snackPosition: SnackPosition.BOTTOM,
           duration: Duration(seconds: 2), // Set the duration to 2 seconds
         );
-
       }
     } catch (e) {
       // Handle any exceptions here

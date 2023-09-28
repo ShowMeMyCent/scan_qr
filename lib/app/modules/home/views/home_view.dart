@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:qrcodescan/app/modules/history/views/history_view.dart';
+import 'package:qrcodescan/app/modules/home/views/history_view.dart';
 import 'package:qrcodescan/app/modules/home/views/home_tab_view.dart';
 
 import '../controllers/home_controller.dart';
@@ -69,12 +69,12 @@ class HomeView extends GetView<HomeController> {
               BottomBarItem(
                 icon: Icon(Icons.home),
                 title: Text("Home"),
-                activeColor: Colors.purple,
+                activeColor: Color(0xff0F3757),
               ),
               BottomBarItem(
                 icon: Icon(Icons.description),
                 title: Text("Laporan"),
-                activeColor: Colors.purple,
+                activeColor: Color(0xff21793c),
               ),
             ],
           ),

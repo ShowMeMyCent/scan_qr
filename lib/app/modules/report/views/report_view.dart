@@ -57,8 +57,8 @@ class ReportView extends GetView<ReportController> {
                 Container(
                   decoration: BoxDecoration(
                     color: Colors.white, // Background color of the box
-                    borderRadius:
-                        BorderRadius.circular(10), // Border radius for rounded corners
+                    borderRadius: BorderRadius.circular(
+                        10), // Border radius for rounded corners
                     boxShadow: [
                       BoxShadow(
                         color: Colors.grey.withOpacity(0.5), // Shadow color
@@ -68,7 +68,8 @@ class ReportView extends GetView<ReportController> {
                       ),
                     ],
                   ),
-                  width: MediaQuery.of(context).size.width * 0.8, // Responsive width
+                  width: MediaQuery.of(context).size.width *
+                      0.8, // Responsive width
                   height: 300,
                   child: Column(
                     children: [
@@ -76,10 +77,12 @@ class ReportView extends GetView<ReportController> {
                         width: double.infinity,
                         child: Container(
                           decoration: const BoxDecoration(
-                            color: Colors.yellow, // Header background color
+                            color: Color(0xff0F3757), // Header background color
                             borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(10), // Top-left corner rounded
-                              topRight: Radius.circular(10), // Top-right corner rounded
+                              topLeft: Radius.circular(
+                                  10), // Top-left corner rounded
+                              topRight: Radius.circular(
+                                  10), // Top-right corner rounded
                             ),
                           ),
                           child: Container(
@@ -114,14 +117,16 @@ class ReportView extends GetView<ReportController> {
                                       padding: EdgeInsets.all(10),
                                       child: Text(
                                         'NIS:',
-                                        style: GoogleFonts.poppins(fontSize: 17),
+                                        style:
+                                            GoogleFonts.poppins(fontSize: 17),
                                       ),
                                     ),
                                     Container(
                                       padding: EdgeInsets.all(10),
                                       child: Text(
                                         '${homeC.jsonResponseData!['nis']}',
-                                        style: GoogleFonts.poppins(fontSize: 17),
+                                        style:
+                                            GoogleFonts.poppins(fontSize: 17),
                                       ),
                                     ),
                                   ],
@@ -132,14 +137,16 @@ class ReportView extends GetView<ReportController> {
                                       padding: EdgeInsets.all(10),
                                       child: Text(
                                         'NAMA:',
-                                        style: GoogleFonts.poppins(fontSize: 17),
+                                        style:
+                                            GoogleFonts.poppins(fontSize: 17),
                                       ),
                                     ),
                                     Container(
                                       padding: EdgeInsets.all(10),
                                       child: Text(
                                         '${homeC.jsonResponseData!['nama']}',
-                                        style: GoogleFonts.poppins(fontSize: 17),
+                                        style:
+                                            GoogleFonts.poppins(fontSize: 17),
                                       ),
                                     ),
                                   ],
@@ -150,14 +157,16 @@ class ReportView extends GetView<ReportController> {
                                       padding: EdgeInsets.all(10),
                                       child: Text(
                                         'SALDO:',
-                                        style: GoogleFonts.poppins(fontSize: 17),
+                                        style:
+                                            GoogleFonts.poppins(fontSize: 17),
                                       ),
                                     ),
                                     Container(
                                       padding: EdgeInsets.all(10),
                                       child: Text(
                                         '${homeC.jsonResponseData!['saldo']}',
-                                        style: GoogleFonts.poppins(fontSize: 17),
+                                        style:
+                                            GoogleFonts.poppins(fontSize: 17),
                                       ),
                                     ),
                                   ],
@@ -168,14 +177,16 @@ class ReportView extends GetView<ReportController> {
                                       padding: EdgeInsets.all(10),
                                       child: Text(
                                         'BELANJA:',
-                                        style: GoogleFonts.poppins(fontSize: 17),
+                                        style:
+                                            GoogleFonts.poppins(fontSize: 17),
                                       ),
                                     ),
                                     Container(
                                       padding: EdgeInsets.all(10),
                                       child: Text(
                                         '${homeC.jsonResponseData!['belanja']}',
-                                        style: GoogleFonts.poppins(fontSize: 17),
+                                        style:
+                                            GoogleFonts.poppins(fontSize: 17),
                                       ),
                                     ),
                                   ],
@@ -186,18 +197,19 @@ class ReportView extends GetView<ReportController> {
                                       padding: EdgeInsets.all(10),
                                       child: Text(
                                         'STATUS:',
-                                        style: GoogleFonts.poppins(fontSize: 17),
+                                        style:
+                                            GoogleFonts.poppins(fontSize: 17),
                                       ),
                                     ),
                                     Container(
                                       padding: EdgeInsets.all(10),
                                       child: Text(
                                         '${homeC.jsonResponseData!['status']}',
-                                        style: GoogleFonts.poppins(fontSize: 17),
+                                        style:
+                                            GoogleFonts.poppins(fontSize: 17),
                                       ),
                                     ),
                                   ],
-
                                 ),
                               ],
                             ),
@@ -235,50 +247,60 @@ class ReportView extends GetView<ReportController> {
                   onPressed: isSubmitting
                       ? null // Disable the button while submitting
                       : () async {
-                    if (isSubmitting) {
-                      return; // Do nothing if already submitting
-                    }
+                          if (isSubmitting) {
+                            return; // Do nothing if already submitting
+                          }
 
-                    // Set the flag to indicate submission is in progress
-                    isSubmitting = true;
+                          // Set the flag to indicate submission is in progress
+                          isSubmitting = true;
 
-                    // Convert jumlah and saldo to integers for comparison
-                    int jumlah = int.tryParse(controller.jumlah.text) ?? 0;
-                    int saldo = int.tryParse(homeC.jsonResponseData!["saldo"]) ?? 0;
+                          // Convert jumlah and saldo to integers for comparison
+                          int jumlah =
+                              int.tryParse(controller.jumlah.text) ?? 0;
+                          int saldo =
+                              int.tryParse(homeC.jsonResponseData!["saldo"]) ??
+                                  0;
 
-                    // Check if jumlah is greater than saldo
-                    if (jumlah > saldo) {
-                      // Show a dialog with an error message
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text("Error"),
-                            content: const Text("Belanja lebih besar dari saldo."),
-                            actions: <Widget>[
-                              TextButton(
-                                child: const Text("OK"),
-                                onPressed: () {
-                                  Navigator.of(context).pop(); // Close the dialog
-                                },
-                              ),
-                            ],
-                          );
+                          // Check if jumlah is greater than saldo
+                          if (jumlah > saldo) {
+                            // Show a dialog with an error message
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text("Error"),
+                                  content: const Text(
+                                      "Belanja lebih besar dari saldo."),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      child: const Text("OK"),
+                                      onPressed: () {
+                                        Navigator.of(context)
+                                            .pop(); // Close the dialog
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          } else {
+                            // Call the function to submit data only if validation passes
+                            controller.submitData(
+                                controller.jumlah.text,
+                                homeC.jsonResponseData!["nis"],
+                                homeC.jsonResponseData!["nama"]);
+                          }
                         },
-                      );
-                    } else {
-                      // Call the function to submit data only if validation passes
-                      controller.submitData(controller.jumlah.text, homeC.jsonResponseData!["nis"], homeC.jsonResponseData!["nama"]);
-                    }
-                  },
                   child: const Text('Submit'),
                   style: ButtonStyle(
-                    backgroundColor: isSubmitting || homeC.jsonResponseData!['status'] == 'Block'
-                        ? MaterialStateProperty.all(Colors.grey) // Button is disabled
-                        : MaterialStateProperty.all(Colors.blue), // Button is enabled
+                    backgroundColor: isSubmitting ||
+                            homeC.jsonResponseData!['status'] == 'Block'
+                        ? MaterialStateProperty.all(
+                            Colors.grey) // Button is disabled
+                        : MaterialStateProperty.all(
+                            Colors.blue), // Button is enabled
                   ),
                 )
-
               ],
             ),
           ),
