@@ -76,21 +76,20 @@ class HomeController extends GetxController {
     }
   }
 
-  getData(date) async {
+  Future<List<Map<String, dynamic>>> getData(String date) async {
+    final apiUrl = '$ip/api/history.php?tanggal=$date';
+
     try {
-      final response =
-          await http.get(Uri.parse('$ip/api/history.php?tanggal=${date}'));
+      final response = await http.get(Uri.parse(apiUrl));
+
       if (response.statusCode == 200) {
-        final jsonResponse = jsonDecode(response.body);
-        jsonResponseData = jsonResponse;
-        Get.toNamed(Routes.REPORT);
+        final List<dynamic> jsonData = json.decode(response.body)['data'];
+        return jsonData.cast<Map<String, dynamic>>();
       } else {
-        controller?.resumeCamera();
-        return Get.snackbar('Error', 'Status Code: ${response.statusCode}');
+        throw Exception('Failed to load data');
       }
     } catch (e) {
-      controller?.resumeCamera();
-      return Get.snackbar('Server Error', '${e}');
+      throw Exception('Failed to load data: $e');
     }
   }
 
