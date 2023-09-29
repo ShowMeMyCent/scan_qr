@@ -67,8 +67,6 @@ class HomeTabView extends GetView<HomeController> {
                     if (_formKey.currentState!.validate()) {
                       controller.saveIp(ipController
                           .text); // Save the IP to SharedPreferences
-                      ipController.clear();
-                      Get.back(); // Close the dialog
                     }
                   },
                   child: Text(

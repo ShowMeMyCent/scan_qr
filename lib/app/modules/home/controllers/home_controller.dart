@@ -20,6 +20,7 @@ class HomeController extends GetxController {
   void saveIp(ip) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('ip', '$ip');
+    Get.back();
   }
 
   void changeIndex(int index) {
@@ -58,11 +59,17 @@ class HomeController extends GetxController {
         Get.toNamed(Routes.REPORT);
       } else {
         controller?.resumeCamera();
-        return Get.snackbar('Error', 'Status Code: ${response.statusCode}');
+        return Get.snackbar('Error', 'Status Code: ${response.statusCode}',
+            duration: Duration(seconds: 2),
+            backgroundColor: Colors.white,
+            colorText: Colors.black);
       }
     } catch (e) {
       controller?.resumeCamera();
-      return Get.snackbar('Server Error', '${e}');
+      return Get.snackbar('Server Error', 'IP address wrong',
+          duration: Duration(seconds: 2),
+          backgroundColor: Colors.white,
+          colorText: Colors.black);
     }
   }
 
@@ -70,15 +77,25 @@ class HomeController extends GetxController {
     final response = await http.get(Uri.parse('$ip/api/ping.php'));
 
     if (response.statusCode != 200) {
-      return Get.snackbar('Error', 'error code ${response.statusCode}',duration: Duration(seconds: 2),backgroundColor: Colors.white,colorText: Colors.black);
+      return Get.snackbar('Error', 'error code ${response.statusCode}',
+          duration: Duration(seconds: 2),
+          backgroundColor: Colors.white,
+          colorText: Colors.black);
     } else {
-      Get.snackbar('Success', 'Connection success',duration: Duration(seconds: 2),backgroundColor: Colors.white,colorText: Colors.black);
+      Get.snackbar('Success', 'Connection success',
+          duration: Duration(seconds: 2),
+          backgroundColor: Colors.white,
+          colorText: Colors.black);
     }
   }
 
   Future<List<Map<String, dynamic>>> getData(String date) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.clear();
     final String? ip = prefs.getString('ip');
+    if (ip == null) {
+      throw ('IP KOSONG');
+    }
 
     final apiUrl = '$ip/api/history.php?tanggal=$date';
 
@@ -88,10 +105,10 @@ class HomeController extends GetxController {
         final List<dynamic> jsonData = json.decode(response.body)['data'];
         return jsonData.cast<Map<String, dynamic>>();
       } else {
-        throw Exception('Failed to load data');
+        throw ('Failed to load data');
       }
     } catch (e) {
-      throw Exception('Failed to load data: $e');
+      throw ('There is error while trying to connect with server');
     }
   }
 

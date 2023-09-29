@@ -33,7 +33,8 @@ class ReportView extends GetView<ReportController> {
 
   void _formatInput() {
     final text = _jumlahController.text;
-    final parsedValue = int.tryParse(text.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0;
+    final parsedValue =
+        int.tryParse(text.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0;
     final formattedText = _indonesianFormat.format(parsedValue);
 
     if (_jumlahController.text != formattedText) {
@@ -49,7 +50,7 @@ class ReportView extends GetView<ReportController> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
             bottom: Radius.circular(10),
           ),
@@ -134,6 +135,7 @@ class ReportView extends GetView<ReportController> {
                                 style: GoogleFonts.poppins(
                                   fontSize: 20,
                                   fontWeight: FontWeight.w600,
+                                  color: Colors.white,
                                 ),
                               ),
                             ),
@@ -158,7 +160,7 @@ class ReportView extends GetView<ReportController> {
                                       child: Text(
                                         'NIS:',
                                         style:
-                                        GoogleFonts.poppins(fontSize: 17),
+                                            GoogleFonts.poppins(fontSize: 17),
                                       ),
                                     ),
                                     Container(
@@ -166,7 +168,7 @@ class ReportView extends GetView<ReportController> {
                                       child: Text(
                                         '${homeC.jsonResponseData!['nis']}',
                                         style:
-                                        GoogleFonts.poppins(fontSize: 17),
+                                            GoogleFonts.poppins(fontSize: 17),
                                       ),
                                     ),
                                   ],
@@ -178,7 +180,7 @@ class ReportView extends GetView<ReportController> {
                                       child: Text(
                                         'NAMA:',
                                         style:
-                                        GoogleFonts.poppins(fontSize: 17),
+                                            GoogleFonts.poppins(fontSize: 17),
                                       ),
                                     ),
                                     Container(
@@ -186,7 +188,7 @@ class ReportView extends GetView<ReportController> {
                                       child: Text(
                                         '${homeC.jsonResponseData!['nama']}',
                                         style:
-                                        GoogleFonts.poppins(fontSize: 17),
+                                            GoogleFonts.poppins(fontSize: 17),
                                       ),
                                     ),
                                   ],
@@ -198,7 +200,7 @@ class ReportView extends GetView<ReportController> {
                                       child: Text(
                                         'SALDO:',
                                         style:
-                                        GoogleFonts.poppins(fontSize: 17),
+                                            GoogleFonts.poppins(fontSize: 17),
                                       ),
                                     ),
                                     Container(
@@ -207,7 +209,7 @@ class ReportView extends GetView<ReportController> {
                                         indonesianFormat.format(
                                             homeC.jsonResponseData!['saldo']),
                                         style:
-                                        GoogleFonts.poppins(fontSize: 17),
+                                            GoogleFonts.poppins(fontSize: 17),
                                       ),
                                     ),
                                   ],
@@ -219,16 +221,37 @@ class ReportView extends GetView<ReportController> {
                                       child: Text(
                                         'BELANJA:',
                                         style:
-                                        GoogleFonts.poppins(fontSize: 17),
+                                            GoogleFonts.poppins(fontSize: 17),
                                       ),
                                     ),
                                     Container(
                                       padding: EdgeInsets.all(10),
                                       child: Text(
-                                        indonesianFormat.format(
-                                            int.tryParse(homeC.jsonResponseData!['belanja'])),
+                                        indonesianFormat.format(int.tryParse(
+                                            homeC
+                                                .jsonResponseData!['belanja'])),
                                         style:
-                                        GoogleFonts.poppins(fontSize: 17),
+                                            GoogleFonts.poppins(fontSize: 17),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.all(10),
+                                      child: Text(
+                                        'LIMIT:',
+                                        style:
+                                            GoogleFonts.poppins(fontSize: 17),
+                                      ),
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.all(10),
+                                      child: Text(
+                                        '${homeC.jsonResponseData!['limit']}',
+                                        style:
+                                            GoogleFonts.poppins(fontSize: 17),
                                       ),
                                     ),
                                   ],
@@ -240,7 +263,7 @@ class ReportView extends GetView<ReportController> {
                                       child: Text(
                                         'STATUS:',
                                         style:
-                                        GoogleFonts.poppins(fontSize: 17),
+                                            GoogleFonts.poppins(fontSize: 17),
                                       ),
                                     ),
                                     Container(
@@ -248,7 +271,7 @@ class ReportView extends GetView<ReportController> {
                                       child: Text(
                                         '${homeC.jsonResponseData!['status']}',
                                         style:
-                                        GoogleFonts.poppins(fontSize: 17),
+                                            GoogleFonts.poppins(fontSize: 17),
                                       ),
                                     ),
                                   ],
@@ -289,60 +312,60 @@ class ReportView extends GetView<ReportController> {
                   onPressed: isSubmitting
                       ? null // Disable the button while submitting
                       : () async {
-                    if (isSubmitting) {
-                      return; // Do nothing if already submitting
-                    }
+                          if (isSubmitting) {
+                            return; // Do nothing if already submitting
+                          }
 
-                    // Set the flag to indicate submission is in progress
-                    isSubmitting = true;
-                    // Convert jumlah and saldo to integers for comparison
-                    String jumlahText = _jumlahController.text.replaceAll('Rp. ', '');
-                    String jumlahRpl = jumlahText.replaceAll('.', '');
-                    int jumlah = int.tryParse(jumlahRpl) ?? 0;
+                          // Set the flag to indicate submission is in progress
+                          isSubmitting = true;
+                          // Convert jumlah and saldo to integers for comparison
+                          String jumlahText =
+                              _jumlahController.text.replaceAll('Rp. ', '');
+                          String jumlahRpl = jumlahText.replaceAll('.', '');
+                          int jumlah = int.tryParse(jumlahRpl) ?? 0;
 
-                    int saldo = homeC.jsonResponseData!["saldo"];
+                          int saldo = homeC.jsonResponseData!["saldo"];
 
-                    // Check if jumlah is greater than saldo
-                    if (jumlah > saldo) {
-                      // Show a dialog with an error message
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text("Error"),
-                            content: const Text(
-                                "Belanja lebih besar dari saldo."),
-                            actions: <Widget>[
-                              TextButton(
-                                child: const Text("OK"),
-                                onPressed: () {
-                                  Navigator.of(context)
-                                      .pop(); // Close the dialog
-                                },
-                              ),
-                            ],
-                          );
+                          // Check if jumlah is greater than saldo
+                          if (jumlah > saldo) {
+                            // Show a dialog with an error message
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text("Error"),
+                                  content: const Text(
+                                      "Belanja lebih besar dari saldo."),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      child: const Text("OK"),
+                                      onPressed: () {
+                                        Navigator.of(context)
+                                            .pop(); // Close the dialog
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          } else {
+                            // Call the function to submit data only if validation passes
+                            controller.submitData(
+                              jumlah.toString(),
+                              homeC.jsonResponseData!["nis"],
+                              homeC.jsonResponseData!["nama"],
+                              int.tryParse(homeC.jsonResponseData!["id"]) ?? 0,
+                            );
+                          }
                         },
-                      );
-                    } else {
-                      // Call the function to submit data only if validation passes
-                      controller.submitData(
-                        jumlah.toString(),
-                        homeC.jsonResponseData!["nis"],
-                        homeC.jsonResponseData!["nama"],
-                        int.tryParse(homeC.jsonResponseData!["id"]) ??
-                            0,
-                      );
-                    }
-                  },
                   child: const Text('Submit'),
                   style: ButtonStyle(
                     backgroundColor: isSubmitting ||
-                        homeC.jsonResponseData!['status'] == 'Block'
+                            homeC.jsonResponseData!['status'] == 'Block'
                         ? MaterialStateProperty.all(
-                        Colors.grey) // Button is disabled
+                            Colors.grey) // Button is disabled
                         : MaterialStateProperty.all(
-                        Colors.blue), // Button is enabled
+                            Colors.blue), // Button is enabled
                   ),
                 )
               ],

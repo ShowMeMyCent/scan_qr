@@ -20,16 +20,18 @@ class HomeView extends GetView<HomeController> {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
               bottom: Radius.circular(10),
             ),
           ),
           elevation: 0,
-          actions: [SvgPicture.asset(
-            'assets/images/logo.svg', width: 100, // Replace with the path to your SVG file
-
-          )],
+          actions: [
+            SvgPicture.asset(
+              'assets/images/logo.svg',
+              width: 100, // Replace with the path to your SVG file
+            )
+          ],
           title: RichText(
             text: TextSpan(
               children: [
@@ -55,8 +57,8 @@ class HomeView extends GetView<HomeController> {
         ),
         body: Obx(
           () => IndexedStack(
-            children: screens,
             index: controller.selectedIndex.value,
+            children: screens,
           ),
         ),
         bottomNavigationBar: Obx(
