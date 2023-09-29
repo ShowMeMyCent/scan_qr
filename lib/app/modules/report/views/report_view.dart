@@ -309,62 +309,57 @@ class ReportView extends GetView<ReportController> {
                   onPressed: isSubmitting
                       ? null // Disable the button while submitting
                       : () async {
-                          if (isSubmitting) {
-                            return; // Do nothing if already submitting
-                          }
+                    if (isSubmitting) {
+                      return; // Do nothing if already submitting
+                    }
 
-                          // Set the flag to indicate submission is in progress
-                          isSubmitting = true;
-                          // Convert jumlah and saldo to integers for comparison
-                          String jumlahText =
-                              _jumlahController.text.replaceAll('Rp. ', '');
-                          String jumlahRpl = jumlahText.replaceAll('.', '');
-                          int jumlah = int.tryParse(jumlahRpl) ?? 0;
+                    // Convert jumlah and saldo to integers for comparison
+                    String jumlahText = _jumlahController.text.replaceAll('Rp. ', '');
+                    String jumlahRpl = jumlahText.replaceAll('.', '');
+                    int jumlah = int.tryParse(jumlahRpl) ?? 0;
+                    int saldo = homeC.jsonResponseData!["saldo"];
+                    int belanja = homeC.jsonResponseData!["belanja"];
+                    int limit = homeC.jsonResponseData!["limit"];
+                    String status = homeC.jsonResponseData!["status"];
 
-                          int saldo = homeC.jsonResponseData!["saldo"];
-
-                          // Check if jumlah is greater than saldo
-                          if (jumlah > saldo) {
-                            // Show a dialog with an error message
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: const Text("Error"),
-                                  content: const Text(
-                                      "Belanja lebih besar dari saldo."),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      child: const Text("OK"),
-                                      onPressed: () {
-                                        Navigator.of(context)
-                                            .pop(); // Close the dialog
-                                      },
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          } else {
-                            // Call the function to submit data only if validation passes
-                            controller.submitData(
-                              jumlah.toString(),
-                              homeC.jsonResponseData!["nis"],
-                              homeC.jsonResponseData!["nama"],
-                              int.tryParse(homeC.jsonResponseData!["id"]) ?? 0,
-                            );
-                          }
+                    // Check if jumlah is greater than saldo
+                    if (jumlah > saldo || (belanja + jumlah) > limit || status == 'Block') {
+                      // Show a dialog with an error message
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text("Error"),
+                            content: const Text("Belanja lebih besar dari saldo atau melebihi limit atau status diblokir."),
+                            actions: <Widget>[
+                              TextButton(
+                                child: const Text("OK"),
+                                onPressed: () {
+                                  Navigator.of(context).pop(); // Close the dialog
+                                },
+                              ),
+                            ],
+                          );
                         },
+                      );
+                    } else {
+                      // Call the function to submit data only if validation passes
+                      controller.submitData(
+                        jumlah.toString(),
+                        homeC.jsonResponseData!["nis"],
+                        homeC.jsonResponseData!["nama"],
+                        int.tryParse(homeC.jsonResponseData!["id"]) ?? 0,
+                      );
+                    }
+                  },
                   child: const Text('Submit'),
                   style: ButtonStyle(
-                    backgroundColor: isSubmitting ||
-                            homeC.jsonResponseData!['status'] == 'Block'
-                        ? MaterialStateProperty.all(
-                            Colors.grey) // Button is disabled
-                        : MaterialStateProperty.all(
-                            Colors.blue), // Button is enabled
+                    backgroundColor: isSubmitting
+                        ? MaterialStateProperty.all(Colors.grey) // Button is disabled
+                        : MaterialStateProperty.all(Colors.blue), // Button is enabled
                   ),
                 )
+
               ],
             ),
           ),
