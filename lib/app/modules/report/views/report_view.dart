@@ -109,7 +109,7 @@ class ReportView extends GetView<ReportController> {
                   ),
                   width: MediaQuery.of(context).size.width *
                       0.8, // Responsive width
-                  height: 300,
+                  height: 350,
                   child: Column(
                     children: [
                       SizedBox(
@@ -227,11 +227,8 @@ class ReportView extends GetView<ReportController> {
                                     Container(
                                       padding: EdgeInsets.all(10),
                                       child: Text(
-                                        indonesianFormat.format(int.tryParse(
-                                            homeC
-                                                .jsonResponseData!['belanja'])),
-                                        style:
-                                            GoogleFonts.poppins(fontSize: 17),
+                                        indonesianFormat.format(homeC.jsonResponseData!['belanja']),
+                                        style: GoogleFonts.poppins(fontSize: 17),
                                       ),
                                     ),
                                   ],

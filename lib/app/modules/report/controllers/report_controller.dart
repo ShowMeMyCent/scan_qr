@@ -59,7 +59,7 @@ class ReportController extends GetxController {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Text(
-                    "$message belanja hari ini atas nama $nama, Rp. $formattedJumlah pada tanggal $formattedDate saldo akhir Rp. $formattedSaldo"),
+                    "$message belanja hari ini atas nama $nama, $formattedJumlah pada tanggal $formattedDate saldo akhir $formattedSaldo"),
                 SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
