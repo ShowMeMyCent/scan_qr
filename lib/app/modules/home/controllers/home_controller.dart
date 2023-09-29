@@ -91,7 +91,7 @@ class HomeController extends GetxController {
 
   Future<List<Map<String, dynamic>>> getData(String date) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.clear();
+
     final String? ip = prefs.getString('ip');
     if (ip == null) {
       throw ('IP KOSONG');
