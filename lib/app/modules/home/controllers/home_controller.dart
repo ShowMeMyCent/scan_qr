@@ -125,11 +125,6 @@ class HomeController extends GetxController {
     Get.back();
   }
 
-  resumecamera() {
-    controller?.resumeCamera();
-    return true;
-  }
-
   Rx<DateTime> selectedDate = DateTime.now().obs;
   Future<void> selectDate(BuildContext context) async {
     DateTime? picked = await showDatePicker(
@@ -141,6 +136,17 @@ class HomeController extends GetxController {
 
     if (picked != null && picked != selectedDate.value) {
       selectedDate.value = picked;
+    }
+  }
+
+  Future<bool> onWillPop() async {
+    if (controller != null) {
+      // Check if the camera controller is not null (i.e., report_view.dart is active)
+      Get.back();
+      controller!.resumeCamera(); // Resume the camera
+      return false; // Prevent back navigation
+    } else {
+      return true; // Allow back navigation
     }
   }
 }
