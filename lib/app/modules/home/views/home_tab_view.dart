@@ -19,9 +19,24 @@ class HomeTabView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: QRView(
-        key: qrKey,
-        onQRViewCreated: controller.onQRViewCreated,
+      body: Column(
+        children: [
+          Expanded(
+            child: _buildQrView(context),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ElevatedButton(
+              onPressed: () {
+                controller.flipCamera();
+              },
+              child: Icon(Icons.flip_camera_ios),
+              style: ElevatedButton.styleFrom(
+                primary: Color(0xff0F3757), // Set the background color here
+              ),
+            ),
+          ),
+        ],
       ),
       backgroundColor: Color(0xFFF3F7F8),
       floatingActionButton: FloatingActionButton(
@@ -80,6 +95,20 @@ class HomeTabView extends GetView<HomeController> {
         },
         tooltip: 'Increment',
         child: const Icon(Icons.add),
+      ),
+    );
+  }
+
+  Widget _buildQrView(BuildContext context) {
+    return QRView(
+      key: qrKey,
+      onQRViewCreated: controller.onQRViewCreated,
+      overlay: QrScannerOverlayShape(
+        borderColor: Colors.green,
+        borderRadius: 10,
+        borderLength: 30,
+        borderWidth: 10,
+        cutOutSize: 300,
       ),
     );
   }

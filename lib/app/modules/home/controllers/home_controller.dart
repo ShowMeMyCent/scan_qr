@@ -12,6 +12,8 @@ import '../../../routes/app_pages.dart';
 class HomeController extends GetxController {
   var selectedIndex = 0.obs;
   var textValue = 0.obs;
+  RxBool isCameraFlipped =
+      false.obs; // Initialize with the initial camera direction.
   Map<String, dynamic>? jsonResponseData;
   QRViewController? controller;
 
@@ -26,6 +28,16 @@ class HomeController extends GetxController {
   void changeIndex(int index) {
     (index != 0) ? controller!.pauseCamera() : controller!.resumeCamera();
     selectedIndex.value = index;
+  }
+
+  flipCamera() {
+    controller?.getCameraInfo().then((cameraFacing) {
+      if (cameraFacing == CameraFacing.back) {
+        controller!.flipCamera();
+      } else if (cameraFacing == CameraFacing.front) {
+        controller!.flipCamera();
+      }
+    });
   }
 
   fetchData(code) async {
