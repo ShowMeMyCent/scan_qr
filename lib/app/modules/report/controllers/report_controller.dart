@@ -4,10 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ReportController extends GetxController {
   //TODO: Implement ReportController
+
+  final player = AudioPlayer();
+
+  Future<void> playAudio(String audioUrl) async {
+    await player.setAsset(audioUrl);
+    await player.play();
+  }
+
   TextEditingController jumlah = TextEditingController();
   // Define a NumberFormat instance for Indonesian formatting
 
@@ -30,7 +39,7 @@ class ReportController extends GetxController {
           'Content-Type': 'application/json', // Set the content type to JSON
         },
         body: jsonEncode({
-          "id" : id,
+          "id": id,
           'nis': nis,
           'jumlah': jumlah,
         }),
@@ -72,6 +81,8 @@ class ReportController extends GetxController {
             ),
           ),
         );
+
+        await playAudio("assets/audio/Success.wav");
       } else {
         Get.offAllNamed(
             '/home'); // Replace with the actual route name for your home page

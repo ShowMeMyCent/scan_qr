@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qrcodescan/app/modules/home/controllers/home_controller.dart';
 
@@ -12,6 +14,13 @@ import '../controllers/report_controller.dart';
 class ReportView extends GetView<ReportController> {
   final homeC = Get.find<HomeController>();
   bool isSubmitting = false;
+
+  final player = AudioPlayer();
+
+  Future<void> playAudio(String audioUrl) async {
+    await player.setAsset(audioUrl);
+    await player.play();
+  }
 
   final indonesianFormat = NumberFormat.currency(
     locale: 'id_ID', // 'id_ID' represents the Indonesian locale
@@ -27,7 +36,7 @@ class ReportView extends GetView<ReportController> {
   );
 
   ReportView() {
-    _jumlahController.addListener(_formatInput);
+    //_jumlahController.addListener(_formatInput);
   }
 
   void _formatInput() {
@@ -43,8 +52,6 @@ class ReportView extends GetView<ReportController> {
       );
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +126,8 @@ class ReportView extends GetView<ReportController> {
                           width: double.infinity,
                           child: Container(
                             decoration: const BoxDecoration(
-                              color: Color(0xff0F3757), // Header background color
+                              color:
+                                  Color(0xff0F3757), // Header background color
                               borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(
                                   10,
@@ -153,7 +161,8 @@ class ReportView extends GetView<ReportController> {
                           child: Row(
                             children: [
                               Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Row(
@@ -230,8 +239,10 @@ class ReportView extends GetView<ReportController> {
                                       Container(
                                         padding: EdgeInsets.all(10),
                                         child: Text(
-                                          indonesianFormat.format(homeC.jsonResponseData!['belanja']),
-                                          style: GoogleFonts.poppins(fontSize: 17),
+                                          indonesianFormat.format(homeC
+                                              .jsonResponseData!['belanja']),
+                                          style:
+                                              GoogleFonts.poppins(fontSize: 17),
                                         ),
                                       ),
                                     ],
@@ -295,15 +306,19 @@ class ReportView extends GetView<ReportController> {
                       ),
                       Expanded(
                         child: Container(
-                          padding: const EdgeInsets.all(10),
-                          child: TextField(
-                            keyboardType: TextInputType.number,
-                            controller: _jumlahController,
-                            decoration: const InputDecoration(
-                              hintText: 'Enter Jumlah',
-                            ),
-                          ),
-                        ),
+                            padding: const EdgeInsets.all(10),
+                            child: TextField(
+                              keyboardType: TextInputType.numberWithOptions(
+                                  decimal: false), // Allow decimal input
+                              controller: _jumlahController,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.allow(RegExp(
+                                    r'^\d+\.?\d{0,2}$')), // Allow digits and optional 2 decimal places
+                              ],
+                              decoration: const InputDecoration(
+                                hintText: 'Enter Jumlah',
+                              ),
+                            )),
                       ),
                     ],
                   ),
@@ -312,57 +327,66 @@ class ReportView extends GetView<ReportController> {
                     onPressed: isSubmitting
                         ? null // Disable the button while submitting
                         : () async {
-                      if (isSubmitting) {
-                        return; // Do nothing if already submitting
-                      }
+                            if (isSubmitting) {
+                              return; // Do nothing if already submitting
+                            }
 
-                      // Convert jumlah and saldo to integers for comparison
-                      String jumlahText = _jumlahController.text.replaceAll('Rp. ', '');
-                      String jumlahRpl = jumlahText.replaceAll('.', '');
-                      int jumlah = int.tryParse(jumlahRpl) ?? 0;
-                      int saldo = homeC.jsonResponseData!["saldo"];
-                      int belanja = homeC.jsonResponseData!["belanja"];
-                      int limit = homeC.jsonResponseData!["limit"];
-                      String status = homeC.jsonResponseData!["status"];
+                            // Convert jumlah and saldo to integers for comparison
+                            String jumlahText =
+                                _jumlahController.text.replaceAll('Rp. ', '');
+                            String jumlahRpl = jumlahText.replaceAll('.', '');
+                            int jumlahAwal = int.tryParse(jumlahRpl) ?? 0;
+                            int saldo = homeC.jsonResponseData!["saldo"];
+                            int belanja = homeC.jsonResponseData!["belanja"];
+                            int limit = homeC.jsonResponseData!["limit"];
+                            String status = homeC.jsonResponseData!["status"];
+                            int jumlah = jumlahAwal * 1000;
 
-                      // Check if jumlah is greater than saldo
-                      if (jumlah > saldo || (belanja + jumlah) > limit || status == 'Block') {
-                        // Show a dialog with an error message
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: const Text("Error"),
-                              content: const Text("Belanja lebih besar dari saldo atau melebihi limit atau status diblokir."),
-                              actions: <Widget>[
-                                TextButton(
-                                  child: const Text("OK"),
-                                  onPressed: () {
-                                    Navigator.of(context).pop(); // Close the dialog
-                                  },
-                                ),
-                              ],
-                            );
+                            // Check if jumlah is greater than saldo
+                            if (jumlah > saldo ||
+                                (belanja + jumlah) > limit ||
+                                status == 'Block') {
+                              // Play error audio and show a dialog with an error message
+                              await playAudio("assets/audio/Error.wav");
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: const Text("Error"),
+                                    content: const Text(
+                                        "Belanja lebih besar dari saldo atau melebihi limit atau status diblokir atau saldo = 0"),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        child: const Text("OK"),
+                                        onPressed: () {
+                                          Navigator.of(context)
+                                              .pop(); // Close the dialog
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            } else {
+                              // Call the function to submit data only if validation passes
+                              controller.submitData(
+                                jumlah.toString(),
+                                homeC.jsonResponseData!["nis"],
+                                homeC.jsonResponseData!["nama"],
+                                int.tryParse(homeC.jsonResponseData!["id"]) ??
+                                    0,
+                              );
+                            }
                           },
-                        );
-                      } else {
-                        // Call the function to submit data only if validation passes
-                        controller.submitData(
-                          jumlah.toString(),
-                          homeC.jsonResponseData!["nis"],
-                          homeC.jsonResponseData!["nama"],
-                          int.tryParse(homeC.jsonResponseData!["id"]) ?? 0,
-                        );
-                      }
-                    },
                     child: const Text('Submit'),
                     style: ButtonStyle(
                       backgroundColor: isSubmitting
-                          ? MaterialStateProperty.all(Colors.grey) // Button is disabled
-                          : MaterialStateProperty.all(Colors.blue), // Button is enabled
+                          ? MaterialStateProperty.all(
+                              Colors.grey) // Button is disabled
+                          : MaterialStateProperty.all(
+                              Colors.blue), // Button is enabled
                     ),
                   )
-
                 ],
               ),
             ),
