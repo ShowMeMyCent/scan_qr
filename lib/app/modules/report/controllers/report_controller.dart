@@ -70,19 +70,17 @@ class ReportController extends GetxController {
                 Text(
                     "$message belanja hari ini atas nama $nama, $formattedJumlah pada tanggal $formattedDate saldo akhir $formattedSaldo"),
                 SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    Get.back(); // Close the dialog
-                    Get.offAllNamed('/home'); // Replace with your home route
-                  },
-                  child: Text("Close"), //close
-                ),
               ],
             ),
           ),
         );
 
         await playAudio("assets/audio/Success.wav");
+        Future.delayed(Duration(seconds: 1), () {
+          if (Get.isDialogOpen!) {
+            Get.back();
+          }
+        });
       } else {
         Get.offAllNamed(
             '/home'); // Replace with the actual route name for your home page

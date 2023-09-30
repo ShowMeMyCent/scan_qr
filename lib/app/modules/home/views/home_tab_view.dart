@@ -103,6 +103,7 @@ class HomeTabView extends GetView<HomeController> {
     return QRView(
       key: qrKey,
       onQRViewCreated: controller.onQRViewCreated,
+      cameraFacing: CameraFacing.front,
       overlay: QrScannerOverlayShape(
         borderColor: Colors.green,
         borderRadius: 10,
